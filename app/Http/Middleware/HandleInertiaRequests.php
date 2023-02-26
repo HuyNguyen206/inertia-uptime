@@ -2,6 +2,8 @@
 
 namespace App\Http\Middleware;
 
+use App\Enum\EndpointFrequency;
+use App\Http\Resources\FrequencyResource;
 use Illuminate\Http\Request;
 use Inertia\Middleware;
 use Tightenco\Ziggy\Ziggy;
@@ -39,6 +41,7 @@ class HandleInertiaRequests extends Middleware
                     'location' => $request->url(),
                 ]);
             },
+            'frequencies' => FrequencyResource::collection(EndpointFrequency::cases())
         ]);
     }
 }

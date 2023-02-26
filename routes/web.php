@@ -27,6 +27,7 @@ Route::get('/', function () {
 
 Route::get('/dashboard/{site?}',\App\Http\Controllers\DashboardController::class)->middleware(['auth', 'verified'])->name('dashboard');
 Route::post('sites', \App\Http\Controllers\SiteStoreController::class)->name('sites.store');
+Route::post('endpoints', \App\Http\Controllers\EndpointController::class)->name('endpoint.store');
 Route::middleware('auth')->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');

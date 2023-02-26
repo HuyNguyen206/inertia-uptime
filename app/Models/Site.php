@@ -25,6 +25,11 @@ class Site extends Model
         return $this->belongsTo(User::class);
     }
 
+    public function endpoints()
+    {
+        return $this->hasMany(EndPoint::class);
+    }
+
     public function scopeDefault(Builder $builder)
     {
         $builder->where('is_default', true);
