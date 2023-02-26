@@ -1,23 +1,29 @@
 <script setup>
 import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout.vue';
-import {Head, useForm} from '@inertiajs/vue3';
+import {Head, useForm, usePage} from '@inertiajs/vue3';
 import SiteSelector from "@/Components/SiteSelector.vue";
 import TextInput from "@/Components/TextInput.vue";
 import InputError from "@/Components/InputError.vue";
 import PrimaryButton from "@/Components/PrimaryButton.vue";
 
+const page = usePage();
 const props = defineProps({
     site: Object,
     sites: Object,
 })
 const formEndpointCreate = useForm({
-    endpoint: null,
-    frequency: null,
+    location: null,
+    frequency: page.props.frequencies.data[0].value,
     site_id: props.site.data.id
 })
 
 function storeEndpoint() {
- formEndpointCreate.post(route('endpoint.store'))
+ formEndpointCreate.post(route('endpoint.store'), {
+     preserveScroll: true,
+     onSuccess: function (){
+         formEndpointCreate.reset()
+     }
+ })
 }
 
 </script>
@@ -39,8 +45,8 @@ function storeEndpoint() {
                     <h2 class="text-xl font-bold">New endpoint</h2>
                     <form @submit.prevent="storeEndpoint" class="mt-2 flex justify-start items-center space-x-2">
                         <div>
-                            <TextInput v-model="formEndpointCreate.endpoint" placeholder="/pricing" class="focus:border-none w-[600px] p-2 border " :class="{'border-red-500': formEndpointCreate.errors.frequency}"/>
-                            <InputError class="mt-2" :message="formEndpointCreate.errors.endpoint" />
+                            <TextInput v-model="formEndpointCreate.location" placeholder="/pricing" class="focus:border-none w-[600px] p-2 border " :class="{'border-red-500': formEndpointCreate.errors.frequency}"/>
+                            <InputError class="mt-2" :message="formEndpointCreate.errors.location" />
                             <input type="hidden" v-model="site_id">
                         </div>
                         <div>
