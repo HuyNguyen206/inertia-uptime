@@ -11,6 +11,10 @@ class Site extends Model
 {
     use HasFactory;
 
+    protected $casts = [
+        'email_notification_list' => 'array'
+    ];
+
     protected static function booted()
     {
        static::creating(function (Site $site){

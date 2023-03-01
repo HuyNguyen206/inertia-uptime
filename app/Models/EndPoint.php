@@ -16,4 +16,26 @@ class EndPoint extends Model
     {
         return $this->belongsTo(Site::class);
     }
+
+    public function fullUrl()
+    {
+        return sprintf('%s://%s%s', $this->site->scheme, $this->site->domain, $this->location);
+    }
+
+    public function logs()
+    {
+        return $this->hasMany(EndpointLog::class, 'endpoint_id');
+    }
+
+    public function latestLog()
+    {
+        return $this->hasOne(EndpointLog::class, 'endpoint_id')->latestOfMany()->withDefault();
+    }
+
+    public function upTimePercentage()
+    {
+        if ($this->total_logs_count) {
+            return number_format(($this->success_logs_count/$this->total_logs_count) * 100, 2). '%';
+        }
+    }
 }

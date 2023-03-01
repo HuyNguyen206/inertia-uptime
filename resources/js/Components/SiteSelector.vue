@@ -61,24 +61,7 @@ let showCreateSiteModal = ref(false)
 </script>
 
 <style scoped>
-::v-deep .modal-container {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-}
-::v-deep .modal-content {
-    display: flex;
-    flex-direction: column;
-    margin: 0 1rem;
-    padding: 1rem;
-    border: 1px solid #e2e8f0;
-    border-radius: 0.25rem;
-    background: #fff;
-}
-.modal__title {
-    font-size: 1.5rem;
-    font-weight: 700;
-}
+
 </style>
 
 <style scoped>

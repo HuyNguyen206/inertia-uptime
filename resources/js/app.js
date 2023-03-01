@@ -8,6 +8,8 @@ import {resolvePageComponent} from 'laravel-vite-plugin/inertia-helpers';
 import {ZiggyVue} from '../../vendor/tightenco/ziggy/dist/vue.m';
 import FloatingVue from 'floating-vue'
 import {vfmPlugin} from 'vue-final-modal'
+import VueAwesomePaginate from "vue-awesome-paginate";
+import "vue-awesome-paginate/dist/style.css";
 
 const appName = window.document.getElementsByTagName('title')[0]?.innerText || 'Laravel';
 
@@ -19,6 +21,7 @@ createInertiaApp({
             .use(plugin)
             .use(FloatingVue)
             .use(vfmPlugin)
+            .use(VueAwesomePaginate)
             .use(ZiggyVue, Ziggy)
             .mount(el);
     },

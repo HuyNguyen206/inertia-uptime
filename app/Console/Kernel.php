@@ -12,7 +12,7 @@ class Kernel extends ConsoleKernel
      */
     protected function schedule(Schedule $schedule): void
     {
-        // $schedule->command('inspire')->hourly();
+         $schedule->command('inspire')->hourly();
     }
 
     /**
@@ -23,5 +23,14 @@ class Kernel extends ConsoleKernel
         $this->load(__DIR__.'/Commands');
 
         require base_path('routes/console.php');
+    }
+
+    protected function shortSchedule(\Spatie\ShortSchedule\ShortSchedule $shortSchedule)
+    {
+        // this artisan command will run every second
+        $shortSchedule->command('check:perform')->everySecond();
+
+        // this artisan command will run every second, its signature will be resolved from container
+//        $shortSchedule->command(\Spatie\ShortSchedule\Tests\Unit\TestCommand::class)->everySecond();
     }
 }

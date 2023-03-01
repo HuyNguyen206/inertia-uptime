@@ -21,12 +21,12 @@ return new class extends Migration
         });
         \App\Models\Site::create([
             'user_id' => \App\Models\User::first()->id,
-            'scheme' => 'http',
+            'scheme' => 'https',
             'domain' => 'codecourse.com'
         ]);
         \App\Models\Site::create([
             'user_id' => \App\Models\User::first()->id,
-            'scheme' => 'http',
+            'scheme' => 'https',
             'domain' => 'gamek.com',
             'is_default' => true
         ]);

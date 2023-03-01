@@ -3,6 +3,7 @@
 namespace App\Http\Requests;
 
 use App\Enum\EndpointFrequency;
+use App\Models\Site;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Validation\Rule;
 use Illuminate\Validation\Rules\Enum;
@@ -14,7 +15,7 @@ class EndpointStoreRequest extends FormRequest
      */
     public function authorize(): bool
     {
-        return $this->user()->sites()->where('sites.id', $this->site_id)->exist();
+        return $this->user()->can('create', Site::find($this->site_id));
     }
 
     /**

@@ -4,6 +4,7 @@ namespace App\Http\Middleware;
 
 use App\Enum\EndpointFrequency;
 use App\Http\Resources\FrequencyResource;
+use App\Http\Resources\SiteResource;
 use Illuminate\Http\Request;
 use Inertia\Middleware;
 use Tightenco\Ziggy\Ziggy;
@@ -32,6 +33,7 @@ class HandleInertiaRequests extends Middleware
      */
     public function share(Request $request): array
     {
+        $user = $request->user();
         return array_merge(parent::share($request), [
             'auth' => [
                 'user' => $request->user(),
@@ -41,7 +43,8 @@ class HandleInertiaRequests extends Middleware
                     'location' => $request->url(),
                 ]);
             },
-            'frequencies' => FrequencyResource::collection(EndpointFrequency::cases())
+            'frequencies' => FrequencyResource::collection(EndpointFrequency::cases()),
+            'sites' =>  $user ? SiteResource::collection($user->sites()->latest()->get()) : collect(),
         ]);
     }
 }
