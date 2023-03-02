@@ -28,6 +28,7 @@ Route::middleware('auth')->group(function (){
     Route::get('/dashboard/{site?}',\App\Http\Controllers\DashboardController::class)->middleware(['auth', 'verified'])->name('dashboard');
     Route::post('sites', \App\Http\Controllers\SiteStoreController::class)->name('sites.store');
     Route::patch('sites/emails/{site}', [\App\Http\Controllers\SiteStoreController::class, 'addEmailNotification'])->name('sites.emails.store');
+    Route::patch('sites/emails/{site}/{email}', [\App\Http\Controllers\SiteStoreController::class, 'removeEmailNotification'])->name('sites.emails.remove');
     Route::post('endpoints', [\App\Http\Controllers\EndpointController::class, 'store'])->name('endpoint.store');
     Route::delete('endpoints/{endpoint}', [\App\Http\Controllers\EndpointController::class, 'destroy'])->name('endpoints.delete');
     Route::put('endpoints/{endpoint}', [\App\Http\Controllers\EndpointController::class, 'update'])->name('endpoints.update');

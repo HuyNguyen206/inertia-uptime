@@ -72,4 +72,9 @@ class SitePolicy
     {
         return $user->id === $site->user_id;
     }
+
+    public function canRemoveEmailNotification(User $user, Site $site)
+    {
+        return $user->id === $site->user_id;
+    }
 }

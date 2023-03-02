@@ -1,6 +1,6 @@
 <script setup>
 import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout.vue';
-import {Head, useForm, usePage} from '@inertiajs/vue3';
+import {Head, router, useForm, usePage} from '@inertiajs/vue3';
 import SiteSelector from "@/Components/SiteSelector.vue";
 import TextInput from "@/Components/TextInput.vue";
 import InputError from "@/Components/InputError.vue";
@@ -23,7 +23,12 @@ const formAddEmail = useForm({
 })
 
 function addEmail(){
-    formAddEmail.patch(route('sites.emails.store', props.site.data.id))
+    formAddEmail.patch(route('sites.emails.store', props.site.data.id), {
+        preserveScroll: true,
+        onSuccess: function () {
+            formAddEmail.reset()
+        }
+    })
 }
 
 function storeEndpoint() {
@@ -33,6 +38,10 @@ function storeEndpoint() {
             formEndpointCreate.reset()
         }
     })
+}
+
+function deleteEmail(email) {
+    router.patch(route('sites.emails.remove', props.site.data.id), {email})
 }
 
 </script>
@@ -92,14 +101,23 @@ function storeEndpoint() {
 
                     <div class="mt-4">
                         <h2 class="text-xl font-semibold">Notification channels</h2>
-                        <form @submit.prevent="addEmail" class="mt-2 flex justify-start items-center space-x-2">
+                        <form @submit.prevent="addEmail" class="mt-2 flex flex-col items-start just">
                             <div>
                                 <TextInput v-model="formAddEmail.email" placeholder="huy@gmail.com"
-                                           class="focus:border-none w-[600px] p-2 border"/>
+                                           class="focus:border-none w-96 p-2 border"/>
                                 <InputError class="mt-2" :message="formAddEmail.errors.email"/>
-                                <input type="hidden" v-model="site_id">
                             </div>
-                            <PrimaryButton class="text-center justify-center">Add</PrimaryButton>
+                            <PrimaryButton class="text-center mt-1">Add</PrimaryButton>
+                            <ul class="mt-2 w-96">
+                                <li v-for="email in site.data.email_notification_list" :key="email">
+                                    <div class="flex justify-between items-center">
+                                        <span class="text-md text-gray-600">{{ email }}</span>
+                                        <svg @click="deleteEmail(email)" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="cursor-pointer w-4 h-4">
+                                            <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" />
+                                        </svg>
+                                    </div>
+                                </li>
+                            </ul>
                         </form>
                     </div>
                 </div>
