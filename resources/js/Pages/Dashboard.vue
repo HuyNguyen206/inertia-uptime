@@ -41,7 +41,9 @@ function storeEndpoint() {
 }
 
 function deleteEmail(email) {
-    router.patch(route('sites.emails.remove', props.site.data.id), {email})
+    router.patch(route('sites.emails.remove', {site: props.site.data.id, email}), {}, {
+        preserveScroll: true
+    })
 }
 
 </script>

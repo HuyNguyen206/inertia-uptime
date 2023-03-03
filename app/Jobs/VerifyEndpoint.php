@@ -2,6 +2,7 @@
 
 namespace App\Jobs;
 
+use App\Mail\NotifyStatusEndpoint;
 use App\Models\EndPoint;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
@@ -9,6 +10,7 @@ use Illuminate\Foundation\Bus\Dispatchable;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Queue\SerializesModels;
 use Illuminate\Support\Facades\Http;
+use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Str;
 
 class VerifyEndpoint implements ShouldQueue
@@ -37,10 +39,14 @@ class VerifyEndpoint implements ShouldQueue
                     'response_body' => $response->failed() ? Str::limit($response->body(), 1000) : null
                 ];
                 $endpoint->logs()->create($data);
+
             } catch (\Throwable $ex) {
                 report($ex);
             }
 
+            foreach ($endpoint->site->email_notification_list as $email) {
+                Mail::to($email)->send(new NotifyStatusEndpoint($endpoint));
+            }
             $endpoint->update([
                 'next_check' => now()->addSecond($endpoint->frequency)
             ]);

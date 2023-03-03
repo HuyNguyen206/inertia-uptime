@@ -46,7 +46,7 @@ class SiteStoreController extends Controller
 
         $this->authorize('canRemoveEmailNotification', $site);
         $emailList = $site->email_notification_list;
-        $site->email_notification_list = Arr::prepend($emailList, $email);
+        $site->email_notification_list = collect($emailList)->filter(fn($emailCheck) => $emailCheck !== $email)->all();
         $site->save();
     }
 }
