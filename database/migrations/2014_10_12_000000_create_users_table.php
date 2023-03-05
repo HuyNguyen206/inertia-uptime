@@ -21,7 +21,7 @@ return new class extends Migration
             $table->timestamps();
         });
         \App\Models\User::factory()->create([
-            'name' => 'huy',
+            'name' => 'huy nguyen',
             'email' => 'nguyenlehuyuit@gmail.com'
         ]);
     }

@@ -8,7 +8,7 @@ const props = defineProps({
     logs: Object,
     endpoint: Object
 })
-const currentPage = ref(1);
+const currentPage = ref(props.logs.meta.current_page);
 const showModalResponse = ref(false)
 const response_body = ref('')
 

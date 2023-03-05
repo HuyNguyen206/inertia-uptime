@@ -47,10 +47,11 @@
 </template>
 
 <script setup>
-import {Link, router, useForm} from "@inertiajs/vue3";
+import {Link, router, useForm, usePage} from "@inertiajs/vue3";
 import {ref} from "vue";
 import InputError from "@/Components/InputError.vue";
 
+const page = usePage()
 const isEdit = ref(false);
 const props = defineProps({
     endpoint: Object
@@ -73,7 +74,7 @@ function toggleEditView() {
         formEditEndpoint.put(route('endpoints.update', props.endpoint.id), {
             preserveScroll: true
         })
-        if (page.props.errors.length === 0) {
+        if (!page.props.errors.location && !page.props.errors.frequency) {
             isEdit.value = !isEdit.value
         }
     }

@@ -18,7 +18,7 @@ class Site extends Model
     protected static function booted()
     {
        static::creating(function (Site $site){
-           $origin = $site->domain;
+           $origin = Str::endsWith($site->domain, '/') ? rtrim($site->domain, '/') : $site->domain;
            $site->scheme = Str::before($origin, '://');
            $site->domain = Str::after($origin, '://');
        });

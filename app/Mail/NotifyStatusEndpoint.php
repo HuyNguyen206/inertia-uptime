@@ -23,7 +23,7 @@ class NotifyStatusEndpoint extends Mailable
     {
         $url = $this->endPoint->fullUrl();
         $this->isSuccess = $this->endPoint->latestLog->isSuccess;
-        $this->messageEmail = "This endpoint $url was ". ($this->isSuccess ? 'recovery' : 'down');
+        $this->messageEmail = "This endpoint $url was ". ($this->isSuccess ? 'down' : 'recovery');
         $this->link = route('endpoints.logs.index', $this->endPoint->id);
     }
 
@@ -32,7 +32,7 @@ class NotifyStatusEndpoint extends Mailable
      */
     public function envelope(): Envelope
     {
-        $subject = $this->isSuccess ? 'The service was recovery' : 'The service was down';
+        $subject = $this->isSuccess ? 'The service was down' : 'The service was recovery';
         return new Envelope(
             subject: $subject,
         );
@@ -44,7 +44,7 @@ class NotifyStatusEndpoint extends Mailable
     public function content(): Content
     {
         return new Content(
-            view: 'emails.notify',
+            markdown: 'emails.notify',
         );
     }
 

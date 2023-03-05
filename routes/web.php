@@ -15,6 +15,39 @@ use Inertia\Inertia;
 | contains the "web" middleware group. Now create something great!
 |
 */
+
+Route::get('test-without-generator', function (){
+    function getRange ($max = 10) {
+        for ($i = 1; $i <= $max; $i++) {
+            yield $i;
+        }
+    }
+    $startTime = microtime(true);
+    foreach (range(1, 9000000) as $value) {
+        $a =  $value;
+    }
+    $endTime = microtime(true);
+    $time = number_format(($endTime - $startTime) * 1000, 2);
+    echo $time;
+
+});
+
+Route::get('test-with-generator', function (){
+    function getRange ($start = 1, $max = 10) {
+        for ($i = 1; $i <= $max; $i++) {
+            yield $i;
+        }
+    }
+
+    $startTime = microtime(true);
+    foreach (getRange(max: 1000000000000000000000000000) as $value) {
+        $a = $value;
+    }
+    $endTime = microtime(true);
+    $time = number_format(($endTime - $startTime)*1000, 2);
+    echo $time;
+});
+
 Route::get('/', function () {
     return Inertia::render('Welcome', [
         'canLogin' => Route::has('login'),
@@ -26,9 +59,10 @@ Route::get('/', function () {
 
 Route::middleware('auth')->group(function (){
     Route::get('/dashboard/{site?}',\App\Http\Controllers\DashboardController::class)->middleware(['auth', 'verified'])->name('dashboard');
-    Route::post('sites', \App\Http\Controllers\SiteStoreController::class)->name('sites.store');
-    Route::patch('sites/emails/{site}', [\App\Http\Controllers\SiteStoreController::class, 'addEmailNotification'])->name('sites.emails.store');
-    Route::patch('sites/emails/{site}/{email}', [\App\Http\Controllers\SiteStoreController::class, 'removeEmailNotification'])->name('sites.emails.remove');
+    Route::post('sites', [\App\Http\Controllers\SiteController::class, 'store'])->name('sites.store');
+    Route::delete('sites/{site}', [\App\Http\Controllers\SiteController::class, 'delete'])->name('sites.delete');
+    Route::patch('sites/emails/{site}', [\App\Http\Controllers\SiteController::class, 'addEmailNotification'])->name('sites.emails.store');
+    Route::patch('sites/emails/{site}/{email}', [\App\Http\Controllers\SiteController::class, 'removeEmailNotification'])->name('sites.emails.remove');
     Route::post('endpoints', [\App\Http\Controllers\EndpointController::class, 'store'])->name('endpoint.store');
     Route::delete('endpoints/{endpoint}', [\App\Http\Controllers\EndpointController::class, 'destroy'])->name('endpoints.delete');
     Route::put('endpoints/{endpoint}', [\App\Http\Controllers\EndpointController::class, 'update'])->name('endpoints.update');

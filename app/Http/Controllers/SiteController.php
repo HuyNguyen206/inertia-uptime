@@ -8,12 +8,12 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Arr;
 use Illuminate\Validation\Rule;
 
-class SiteStoreController extends Controller
+class SiteController extends Controller
 {
     /**
      * Handle the incoming request.
      */
-    public function __invoke(SiteStoreRequest $request)
+    public function store(SiteStoreRequest $request)
     {
         $site = $request->user()->sites()->create($request->validated());
 
@@ -48,5 +48,14 @@ class SiteStoreController extends Controller
         $emailList = $site->email_notification_list;
         $site->email_notification_list = collect($emailList)->filter(fn($emailCheck) => $emailCheck !== $email)->all();
         $site->save();
+    }
+
+    public function delete(Site $site)
+    {
+        $this->authorize('canDeleteSite', $site);
+
+        $site->delete();
+
+        return redirect(route('dashboard'));
     }
 }

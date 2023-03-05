@@ -24,8 +24,8 @@ class DashboardController extends Controller
         }
 
         return Inertia::render('Dashboard', [
-            'site' => SiteResource::make($site),
-            'endpoints' => EndpointResource::collection(
+            'site' => !$site ? null : SiteResource::make($site),
+            'endpoints' => !$site ? [] : EndpointResource::collection(
                 $site->endpoints
                     ->load(['site','latestLog'])
                     ->loadCount([

@@ -77,4 +77,9 @@ class SitePolicy
     {
         return $user->id === $site->user_id;
     }
+
+    public function canDeleteSite(User $user, Site $site)
+    {
+        return $user->id === $site->user_id;
+    }
 }

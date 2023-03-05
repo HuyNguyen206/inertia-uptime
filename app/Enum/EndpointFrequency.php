@@ -6,6 +6,7 @@ use Illuminate\Support\Str;
 
 enum EndpointFrequency:int
 {
+    case FIVE_SECONDS = 5;
     case ONE_MINUTE = 60;
     case FIVE_MINUTES = 5*60;
     case THIRTY_MINUTES = 30 * 60;

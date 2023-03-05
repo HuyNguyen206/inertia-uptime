@@ -52,7 +52,7 @@ class EndpointController extends Controller
         $this->authorize('canGetLogs', $endpoint->site);
         return Inertia::render('EndpointLog', [
             'sites' => SiteResource::collection($request->user()->sites),
-            'logs' => LogEndpointResource::collection($endpoint->logs()->paginate(10)),
+            'logs' => LogEndpointResource::collection($endpoint->logs()->latest()->paginate(10)),
             'endpoint' => EndpointResource::make($endpoint)
         ]);
     }

@@ -32,6 +32,9 @@ class VerifyEndpoint implements ShouldQueue
     {
         foreach (EndPoint::query()->with('site')->where('next_check', '<=', now())->lazy() as $endpoint) {
             try {
+                $previousStatusLatestLog = $endpoint->latestLog->id === null ? null : $endpoint->latestLog->is_success;
+                info('test');
+                info($previousStatusLatestLog);
                 $response = Http::get($endpoint->fullUrl());
                 $data = [
                     'status_code' => $response->status(),
@@ -43,10 +46,12 @@ class VerifyEndpoint implements ShouldQueue
             } catch (\Throwable $ex) {
                 report($ex);
             }
-
-            foreach ($endpoint->site->email_notification_list as $email) {
-                Mail::to($email)->send(new NotifyStatusEndpoint($endpoint));
+            if ($previousStatusLatestLog !== null && $endpoint->fresh()->latestLog->is_success !== $previousStatusLatestLog) {
+                foreach ($endpoint->site->email_notification_list as $email) {
+                    Mail::to($email)->send(new NotifyStatusEndpoint($endpoint));
+                }
             }
+
             $endpoint->update([
                 'next_check' => now()->addSecond($endpoint->frequency)
             ]);
